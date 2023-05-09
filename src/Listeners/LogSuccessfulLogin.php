@@ -41,10 +41,12 @@ class LogSuccessfulLogin
         $userAgent = $this->request->userAgent();
         $known = $user->authentications()->whereIpAddress($ip)->whereUserAgent($userAgent)->first();
         $newUser = Carbon::parse($user->{$user->getCreatedAtColumn()})->diffInMinutes(Carbon::now()) < 1;
-
+        $guard = $event->guard;
+        
         $authenticationLog = new AuthenticationLog([
             'ip_address' => $ip,
             'user_agent' => $userAgent,
+            'guard' => $guard,
             'login_at' => Carbon::now(),
         ]);
 
